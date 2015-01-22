@@ -1,0 +1,26 @@
+{
+  "name": "nodeshout",
+  "version": "0.0.1",
+  "description": "Node.js libshout wrapper for streaming to icecast server.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Deniz Gurkaynak <dgurkaynak@gmail.com>",
+  "homepage": "https://github.com/dgurkaynak/nodeshout",
+  "repository": {
+      "type": "git",
+      "url": "https://github.com/dgurkaynak/nodeshout.git"
+  },
+  "bugs": {
+    "url": "https://github.com/dgurkaynak/nodeshout/issues"
+  },
+  "keywords": ["libshout", "icecast", "stream", "radio"],
+  "license": "ISC",
+  "dependencies": {
+    "ffi": "1.2.7",
+    "ref": "1.0.0",
+    "ref-array": "1.1.0",
+    "ref-struct": "1.0.0"
+  }
+}
