@@ -53,4 +53,23 @@ nodeshout.create = function() {
 };
 
 
+/**
+ * Error constant of libshout.
+ * @enum {number}
+ */
+nodeshout.ErrorTypes = {
+    SUCCESS: 0,
+    INSANE: -1,
+    NOCONNECT: -2,
+    NOLOGIN: -3,
+    SOCKET: -4,
+    MALLOC: -5,
+    METADATA: -6,
+    CONNECTED: -7,
+    UNCONNECTED: -8,
+    UNSUPPORTED: -9,
+    BUSY: -10
+};
+
+
 module.exports = nodeshout;
