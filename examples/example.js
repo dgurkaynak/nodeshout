@@ -41,7 +41,7 @@ fs.open("./music/01.mp3", 'r', function(status, fd) {
 
             var num = 0;
             try {
-                num = fs.readSync(fd, buffer, bytesRead, chunkSize, bytesRead);                    
+                num = fs.readSync(fd, buffer, 0, chunkSize, bytesRead);                    
             } catch(e) {
                 console.log(e);
                 debugger;
@@ -51,10 +51,7 @@ fs.open("./music/01.mp3", 'r', function(status, fd) {
             console.log('Bytes read:' + bytesRead + ' Total:' + fileSize);
 
             if (num > 0) {
-                var newBuffer = new Buffer(chunkSize);
-                buffer.copy(newBuffer, 0, bytesRead - num);
-
-                shout.send(newBuffer, num);
+                shout.send(buffer, num);
             }
             else {
                 console.log('Zero bytes read, aborting');
