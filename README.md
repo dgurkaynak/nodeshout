@@ -60,6 +60,28 @@ metadata.add('song', 'Led Zeppelin - I can\'t quit you baby');
 shout.setMetadata(metadata);
 ```
 
+Streams
+-------------
+Helper streams are makes all the things super-easy. You don't have to deal with reading and syncing stuff. They're avaliable `>= 0.1.1`.
+
+Include helper stream classes.
+
+```
+var FileReadStream = require('nodeshout').FileReadStream,
+    ShoutStream = require('nodeshout').ShoutStream;
+```
+and then:
+```
+var fileStream = new FileReadStream('./some/music.mp3', 65536),
+    shoutStream = fileStream.pipe(new ShoutStream(shout));
+
+shoutStream.on('finish', function() {
+    // Finished playing, you can create
+    // another stream for next song
+});
+```
+That's all.
+
 Example
 -------------
 Check the demos folder.
