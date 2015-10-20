@@ -65,6 +65,13 @@ nodeshout.createMetadata = function() {
 
 
 /**
+ * Export helper streams.
+ */
+nodeshout.FileReadStream = require('./helper-streams/FileReadStream');
+nodeshout.ShoutStream = require('./helper-streams/ShoutStream');
+
+
+/**
  * Error constant of libshout.
  * @enum {number}
  */
