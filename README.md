@@ -62,7 +62,7 @@ shout.setMetadata(metadata);
 
 Streams
 -------------
-Helper streams are makes all the things super-easy. You don't have to deal with reading and syncing stuff. They're avaliable `>= 0.1.1`.
+Helper streams make all the things super-easy. You don't have to deal with reading and syncing stuff. They're avaliable `>= 0.1.1`.
 
 Include helper stream classes.
 
@@ -70,7 +70,7 @@ Include helper stream classes.
 var FileReadStream = require('nodeshout').FileReadStream,
     ShoutStream = require('nodeshout').ShoutStream;
 ```
-and then:
+and then pipe them together. That's all!
 ```
 var fileStream = new FileReadStream('./some/music.mp3', 65536),
     shoutStream = fileStream.pipe(new ShoutStream(shout));
@@ -80,7 +80,6 @@ shoutStream.on('finish', function() {
     // another stream for next song
 });
 ```
-That's all.
 
 Example
 -------------
