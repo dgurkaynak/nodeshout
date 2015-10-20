@@ -19,6 +19,11 @@ shout.setAudioInfo('channels', '2');
 
 shout.open();
 
+// Set metadata
+var metadata = nodeshout.createMetadata();
+metadata.add('song', 'Led Zeppelin - I can\'t quit you baby');
+shout.setMetadata(metadata);
+
 
 // Don't forget to replace mp3 file path.
 fs.open("./music/01.mp3", 'r', function(status, fd) {
