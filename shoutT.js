@@ -6,7 +6,7 @@ var libshout = require('./libshout');
  * @constructor
  */
 var shoutT = function() {
-    this.ptr = libshout.shout_new();    
+    this.ptr = libshout.shout_new();
 };
 
 
@@ -19,7 +19,7 @@ shoutT.prototype.free = function() {
 
 
 /**
- * Returns a statically allocated string describing the last shout error that occured in this connection. 
+ * Returns a statically allocated string describing the last shout error that occured in this connection.
  * Only valid until the next call affecting this connection.
  * @return {string}
  */
@@ -31,7 +31,7 @@ shoutT.prototype.getError = function() {
 /**
  * Sets the server hostname or IP address. The default is localhost.
  * @param {string} host
- * @return {number} 
+ * @return {number}
  */
 shoutT.prototype.setHost = function(host) {
     return libshout.shout_set_host(this.ptr, host);
@@ -41,7 +41,7 @@ shoutT.prototype.setHost = function(host) {
 /**
  * Sets the server port. The default is 8000.
  * @param {number} port
- * @return {number} 
+ * @return {number}
  */
 shoutT.prototype.setPort = function(port) {
     return libshout.shout_set_port(this.ptr, port);
@@ -49,7 +49,7 @@ shoutT.prototype.setPort = function(port) {
 
 
 /**
- * Sets the user to authenticate as, for protocols that can use this parameter. 
+ * Sets the user to authenticate as, for protocols that can use this parameter.
  * The default is source.
  * @param {string} user
  * @return {number}
@@ -60,7 +60,7 @@ shoutT.prototype.setUser = function(user) {
 
 
 /**
- * Sets the password to authenticate to the server with. This parameter must be set. 
+ * Sets the password to authenticate to the server with. This parameter must be set.
  * There is no default.
  * @param {string} password
  * @return {number}
@@ -111,7 +111,7 @@ shoutT.prototype.setGenre = function(genre) {
 
 
 /**
- * Sets the user agent header. This is libshout/VERSION by default. 
+ * Sets the user agent header. This is libshout/VERSION by default.
  * If you don't know what this function is for, don't use it.
  * @param {string} agent
  * @return {number}
@@ -132,8 +132,8 @@ shoutT.prototype.setDescription = function(description) {
 
 
 /**
- * Sets a stream audio parameter (eg bitrate, samplerate, channels or quality). The currently defined parameters 
- * are listed in the Audio Info Constants section, but you are free to add additional fields if your 
+ * Sets a stream audio parameter (eg bitrate, samplerate, channels or quality). The currently defined parameters
+ * are listed in the Audio Info Constants section, but you are free to add additional fields if your
  * directory server understands them.
  * @param {string} key
  * @param {string} value
@@ -145,7 +145,7 @@ shoutT.prototype.setAudioInfo = function(key, value) {
 
 
 /**
- * Setting this to true asks the server to list the stream in any directories it knows about. 
+ * Setting this to true asks the server to list the stream in any directories it knows about.
  * To suppress listing, set this to false. The default is false.
  * @param {boolean} isPublic
  * @return {number}
@@ -156,7 +156,7 @@ shoutT.prototype.setPublic = function(isPublic) {
 
 
 /**
- * Sets the audio format of this stream. (0=ogg, 1=mp3) 
+ * Sets the audio format of this stream. (0=ogg, 1=mp3)
  * The currently supported formats are listed in Format Constants. The default is SHOUT_FORMAT_VORBIS.
  * @param {number} format
  * @return {number}
@@ -167,7 +167,7 @@ shoutT.prototype.setFormat = function(format) {
 
 
 /**
- * Set the protocol with which to connect to the server. Supported protocols are listed in Protocol Constants. 
+ * Set the protocol with which to connect to the server. Supported protocols are listed in Protocol Constants.
  * The default is SHOUT_PROTOCOL_HTTP (compatible with Icecast 2).
  * @param {number} protocol
  * @return {number}
@@ -196,7 +196,7 @@ shoutT.prototype.close = function() {
 
 
 /**
- * Sends length bytes of audio data from the buffer pointed to by data to the server. 
+ * Sends length bytes of audio data from the buffer pointed to by data to the server.
  * The connection must already have been established by a successful call to shout_open.
  * @param {Buffer} buff
  * @param {number} length
@@ -208,9 +208,9 @@ shoutT.prototype.send = function(buff, length) {
 
 
 /**
- * Causes the caller to sleep for the amount of time necessary to play back audio sent since 
- * the last call to shout_sync. Should be called before every call to shout_send to ensure 
- * that audio data is sent to the server at the correct speed. Alternatively, the caller may 
+ * Causes the caller to sleep for the amount of time necessary to play back audio sent since
+ * the last call to shout_sync. Should be called before every call to shout_send to ensure
+ * that audio data is sent to the server at the correct speed. Alternatively, the caller may
  * use shout_delay to determine the number of milliseconds to wait and delay itself.
  */
 shoutT.prototype.sync = function() {
@@ -219,14 +219,28 @@ shoutT.prototype.sync = function() {
 
 
 /**
- * Returns the number of milliseconds the caller should wait before calling shout_send again. 
- * This function is provided as an alternative to shout_sync for applications that may wish 
+ * Returns the number of milliseconds the caller should wait before calling shout_send again.
+ * This function is provided as an alternative to shout_sync for applications that may wish
  * to do other processing in the meantime.
  * @return {number}
  */
 shoutT.prototype.delay = function() {
     return libshout.shout_delay(this.ptr);
 };
+
+
+/**
+ * Sets metadata on the connection self to metadata. Only MP3 streams
+ * support this type of metadata update. You may use this function on
+ * defined but closed connections (this is useful if you simply want to
+ * set the metadata for a stream provided by another process).
+ * @param {metadataT} metadata
+ * @return {number}
+ */
+shoutT.prototype.setMetadata = function(metadata) {
+    return libshout.shout_set_metadata(this.ptr, metadata.ptr);
+};
+
 
 
 module.exports = shoutT;

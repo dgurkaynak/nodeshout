@@ -1,5 +1,6 @@
 var libshout = require('./libshout'),
     shoutT = require('./shoutT'),
+    metadataT = require('./metadataT'),
     nodeshout = {};
 
 
@@ -12,7 +13,7 @@ nodeshout.libshout_ = libshout;
 
 
 /**
- * Initializes the shout library. This function must always be called before 
+ * Initializes the shout library. This function must always be called before
  * any other libshout function.
  */
 nodeshout.init = function() {
@@ -21,7 +22,7 @@ nodeshout.init = function() {
 
 
 /**
- * Releases any resources which may have been allocated by a call to shout_init. 
+ * Releases any resources which may have been allocated by a call to shout_init.
  * An application should call this function after it has finished using libshout.
  */
 nodeshout.shutdown = function() {
@@ -44,12 +45,22 @@ nodeshout.getVersion = function() {
 
 
 /**
- * Allocates a new shout_t structure. May return NULL if no memory is available. 
- * The result should be disposed of with shout_free when you are finished with it.
+ * Allocates a new shout_t structure. May return NULL if no memory is available.
+ * The result should be disposed of with free when you are finished with it.
  * @return {shoutT}
  */
 nodeshout.create = function() {
     return new shoutT();
+};
+
+
+/**
+ * Allocates a new medata_t structure. May return NULL if no memory is available.
+ * The result should be disposed of with free when you are finished with it.
+ * @return {metadataT}
+ */
+nodeshout.createMetadata = function() {
+    return new metadataT();
 };
 
 
