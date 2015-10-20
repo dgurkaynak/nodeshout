@@ -1,6 +1,6 @@
 {
   "name": "nodeshout",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Native libshout bindings for node.",
   "main": "index.js",
   "scripts": {
