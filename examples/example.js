@@ -10,7 +10,7 @@ var shout = nodeshout.create();
 shout.setHost('localhost');
 shout.setPort(8000);
 shout.setUser('source');
-shout.setPassword('sourcepass');
+shout.setPassword('hackme');
 shout.setMount('deneme');
 shout.setFormat(1); // 0=ogg, 1=mp3
 shout.setAudioInfo('bitrate', '192');
@@ -41,7 +41,7 @@ fs.open("./music/01.mp3", 'r', function(status, fd) {
 
             var num = 0;
             try {
-                num = fs.readSync(fd, buffer, 0, chunkSize, bytesRead);                    
+                num = fs.readSync(fd, buffer, 0, chunkSize, bytesRead);
             } catch(e) {
                 console.log(e);
                 debugger;
