@@ -18,9 +18,9 @@
   "keywords": ["libshout", "icecast", "stream", "radio"],
   "license": "ISC",
   "dependencies": {
-    "ffi": "2.0.0",
-    "ref": "1.2.0",
-    "ref-array": "1.1.2",
-    "ref-struct": "1.0.2"
+    "ffi": "^2.0.0",
+    "ref": "^1.2.0",
+    "ref-array": "^1.1.2",
+    "ref-struct": "^1.0.2"
   }
 }
