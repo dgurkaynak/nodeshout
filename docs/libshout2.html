@@ -1,0 +1,249 @@
+
+<!-- saved from url=(0053)libshout2.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252"><title>Programming With Libshout 2</title><meta name="generator" content="DocBook XSL Stylesheets V1.68.1"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="book" lang="en"><div class="titlepage"><div><div><h1 class="title"><a name="id2449882"></a>Programming With Libshout 2</h1></div><div><p class="releaseinfo">$Id: libshout.xml 7019 2004-07-06 08:05:47Z brendan $</p></div></div><hr></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="chapter"><a href="libshout2.html#id2488679">1. Overview</a></span></dt><dt><span class="chapter"><a href="libshout2.html#id2488718">2. Reference</a></span></dt><dd><dl><dt><span class="section"><a href="libshout2.html#id2488723">Functions</a></span></dt><dd><dl><dt><span class="section"><a href="libshout2.html#id2488727">Global functions</a></span></dt><dt><span class="section"><a href="libshout2.html#id2450555">Managing connections</a></span></dt><dt><span class="section"><a href="libshout2.html#id2451131">Sending data</a></span></dt><dt><span class="section"><a href="libshout2.html#id2498131">Connection parameters</a></span></dt><dt><span class="section"><a href="libshout2.html#id2499325">Metadata</a></span></dt></dl></dd><dt><span class="section"><a href="libshout2.html#id2499667">Data Types</a></span></dt><dt><span class="section"><a href="libshout2.html#id2499715">Constants</a></span></dt></dl></dd></dl></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="id2488679"></a>Chapter&nbsp;1.&nbsp;Overview</h2></div></div></div><p>
+libshout is a library for streaming audio to icecast or shoutcast-compatible
+servers. Currently it supports two audio formats and three protocols.
+</p><div class="itemizedlist"><p class="title"><b>Audio Formats</b></p><ul type="disc"><li>Ogg Vorbis</li><li>MP3</li></ul></div><div class="itemizedlist"><p class="title"><b>Protocols</b></p><ul type="disc"><li>HTTP</li><li>Audiocast</li><li>ShoutCast</li></ul></div></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="id2488718"></a>Chapter&nbsp;2.&nbsp;Reference</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="libshout2.html#id2488723">Functions</a></span></dt><dd><dl><dt><span class="section"><a href="libshout2.html#id2488727">Global functions</a></span></dt><dt><span class="section"><a href="libshout2.html#id2450555">Managing connections</a></span></dt><dt><span class="section"><a href="libshout2.html#id2451131">Sending data</a></span></dt><dt><span class="section"><a href="libshout2.html#id2498131">Connection parameters</a></span></dt><dt><span class="section"><a href="libshout2.html#id2499325">Metadata</a></span></dt></dl></dd><dt><span class="section"><a href="libshout2.html#id2499667">Data Types</a></span></dt><dt><span class="section"><a href="libshout2.html#id2499715">Constants</a></span></dt></dl></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="id2488723"></a>Functions</h2></div></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2488727"></a>Global functions</h3></div></div></div><div class="funcsynopsis"><a name="shout_init"></a><p><code class="funcdef">void <b class="fsfunc">shout_init</b>(</code><code>)</code>;</p></div>
+Initializes the shout library. Currently this initializes the networking
+mutexes when the library is built with thread safety. This function must
+always be called before any other libshout function.
+
+<div class="funcsynopsis"><a name="shout_shutdown"></a><p><code class="funcdef">void <b class="fsfunc">shout_shutdown</b>(</code><code>)</code>;</p></div>
+Releases any resources which may have been allocated by a call to
+<a href="libshout2.html#shout_init"><code class="function">shout_init</code></a>. An
+application should call this function after it has finished using libshout.
+
+<div class="funcsynopsis"><a name="shout_version"></a><table border="0" summary="Function synopsis" cellspacing="0" cellpadding="0" style="padding-bottom: 1em"><tbody><tr><td><code class="funcdef">const char *<b class="fsfunc">shout_version</b>(</code></td><td><var class="pdparam">major</var>, </td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td><var class="pdparam">minor</var>, </td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td><var class="pdparam">patch</var><code>)</code>;</td><td>&nbsp;</td></tr></tbody></table><table border="0" summary="Function argument synopsis" cellspacing="0" cellpadding="0"><tbody><tr><td>int *&nbsp;</td><td><var class="pdparam">major</var>;</td></tr><tr><td>int *&nbsp;</td><td><var class="pdparam">minor</var>;</td></tr><tr><td>int *&nbsp;</td><td><var class="pdparam">patch</var>;</td></tr></tbody></table></div>
+Returns the version of the libshout library, both as a string via the
+return value, and as a set of integers corresponding to the major,
+minor and patch levels of the library. The application must allocate
+the integer parameters. If any parameter is NULL, libshout will not
+attempt to set it.
+
+</div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2450555"></a>Managing connections</h3></div></div></div><div class="funcsynopsis"><a name="shout_new"></a><p><code class="funcdef">shout_t *<b class="fsfunc">shout_new</b>(</code><code>)</code>;</p></div>
+Allocates a new <span class="type">shout_t</span> structure. May return NULL if no memory
+is available. The result should be disposed of with
+<a href="libshout2.html#shout_free"><code class="function">shout_free</code></a> when you are
+finished with it.
+
+<div class="funcsynopsis"><a name="shout_free"></a><p><code class="funcdef">void <b class="fsfunc">shout_free</b>(</code><var class="pdparam">self</var><code>)</code>;<br><code>shout_t</code> *<code>self</code>;</p></div>
+Frees a <span class="type">shout_t</span> allocated by
+<a href="libshout2.html#shout_new"><code class="function">shout_new</code></a>.
+
+<div class="funcsynopsis"><a name="shout_open"></a><p><code class="funcdef">int <b class="fsfunc">shout_open</b>(</code><var class="pdparam">self</var><code>)</code>;<br><code>shout_t</code> *<code>self</code>;</p></div>
+Opens a connection to a server. All connection parameters must have been
+set prior to this call.
+<div class="variablelist"><p class="title"><b>Return Values</b></p><dl><dt><span class="term"><code class="constant">SHOUTERR_SUCCESS</code></span></dt><dd>The connection was successfully opened.</dd><dt><span class="term"><code class="constant">SHOUTERR_INSANE</code></span></dt><dd><code class="varname">self</code> is corrupt or incorrect. Possible reasons
+  include an unset host, port, or password.</dd><dt><span class="term"><code class="constant">SHOUTERR_CONNECTED</code></span></dt><dd>The connection has already been opened.</dd><dt><span class="term"><code class="constant">SHOUTERR_UNSUPPORTED</code></span></dt><dd>The protocol/format combination is unsupported. For instance,
+  Ogg Vorbis may only be sent via the HTTP protocol.</dd><dt><span class="term"><code class="constant">SHOUTERR_NOCONNECT</code></span></dt><dd>A connection to the server could not be established.</dd><dt><span class="term"><code class="constant">SHOUTERR_SOCKET</code></span></dt><dd>An error occured while talking to the server.</dd><dt><span class="term"><code class="constant">SHOUTERR_NOLOGIN</code></span></dt><dd>The server refused login, probably because authentication
+  failed.</dd><dt><span class="term"><code class="constant">SHOUTERR_MALLOC</code></span></dt><dd>There wasn't enough memory to complete the operation.</dd></dl></div><div class="funcsynopsis"><a name="shout_close"></a><p><code class="funcdef">int <b class="fsfunc">shout_close</b>(</code><var class="pdparam">self</var><code>)</code>;<br><code>shout_t</code> *<code>self</code>;</p></div>
+Closes a connection to the server.
+
+<div class="variablelist"><p class="title"><b>Return Values</b></p><dl><dt><span class="term"><code class="constant">SHOUTERR_SUCCESS</code></span></dt><dd>The connection was successfully closed.</dd><dt><span class="term"><code class="constant">SHOUTERR_INSANE</code></span></dt><dd><code class="varname">self</code> is not a valid <span class="type">shout_t</span>
+  object.</dd><dt><span class="term"><code class="constant">SHOUTERR_UNCONNECTED</code></span></dt><dd><code class="varname">self</code> is not currently connected.</dd></dl></div><div class="funcsynopsis"><a name="shout_get_error"></a><p><code class="funcdef">const char *<b class="fsfunc">shout_get_error</b>(</code><var class="pdparam">self</var><code>)</code>;<br><code>shout_t</code> *<code>self</code>;</p></div>
+Returns a statically allocated string describing the last shout error
+that occured in this connection. Only valid until the next call affecting
+this connection.
+
+<div class="funcsynopsis"><a name="shout_get_errno"></a><p><code class="funcdef">int <b class="fsfunc">shout_get_errno</b>(</code><var class="pdparam">self</var><code>)</code>;<br><code>shout_t</code> *<code>self</code>;</p></div>
+Returns the shout error code of the last error that occured in this connection.
+
+</div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2451131"></a>Sending data</h3></div></div></div><div class="funcsynopsis"><a name="shout_send"></a><table border="0" summary="Function synopsis" cellspacing="0" cellpadding="0" style="padding-bottom: 1em"><tbody><tr><td><code class="funcdef">int <b class="fsfunc">shout_send</b>(</code></td><td><var class="pdparam">self</var>, </td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td><var class="pdparam">data&gt;</var>, </td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td><var class="pdparam">len</var><code>)</code>;</td><td>&nbsp;</td></tr></tbody></table><table border="0" summary="Function argument synopsis" cellspacing="0" cellpadding="0"><tbody><tr><td>shout_t *&nbsp;</td><td><var class="pdparam">self</var>;</td></tr><tr><td>const unsigned char *&nbsp;</td><td><var class="pdparam">data&gt;</var>;</td></tr><tr><td>size_t &nbsp;</td><td><var class="pdparam">len</var>;</td></tr></tbody></table></div>
+Sends <code class="varname">len</code> bytes of audio data from the buffer pointed to by
+<code class="varname">data</code> to the server. The connection must already have been
+established by a successful call to
+<a href="libshout2.html#shout_open"><code class="function">shout_open</code></a>.
+
+<div class="variablelist"><p class="title"><b>Return Values</b></p><dl><dt><span class="term"><code class="constant">SHOUTERR_SUCCESS</code></span></dt><dd>The audio data was sent successfully.</dd><dt><span class="term"><code class="constant">SHOUTERR_INSANE</code></span></dt><dd><code class="varname">self</code> is not a valid <span class="type">shout_t</span>
+  object.</dd><dt><span class="term"><code class="constant">SHOUTERR_UNCONNECTED</code></span></dt><dd><code class="varname">self</code> is not currently connected.</dd><dt><span class="term"><code class="constant">SHOUTERR_MALLOC</code></span></dt><dd>There wasn't enough memory to complete the operation.</dd><dt><span class="term"><code class="constant">SHOUTERR_SOCKET</code></span></dt><dd>An error occured while talking to the server.</dd></dl></div><div class="funcsynopsis"><a name="shout_send_raw"></a><table border="0" summary="Function synopsis" cellspacing="0" cellpadding="0" style="padding-bottom: 1em"><tbody><tr><td><code class="funcdef">ssize_t <b class="fsfunc">shout_send_raw</b>(</code></td><td><var class="pdparam">self</var>, </td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td><var class="pdparam">data&gt;</var>, </td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td><var class="pdparam">len</var><code>)</code>;</td><td>&nbsp;</td></tr></tbody></table><table border="0" summary="Function argument synopsis" cellspacing="0" cellpadding="0"><tbody><tr><td>shout_t *&nbsp;</td><td><var class="pdparam">self</var>;</td></tr><tr><td>const unsigned char *&nbsp;</td><td><var class="pdparam">data&gt;</var>;</td></tr><tr><td>size_t &nbsp;</td><td><var class="pdparam">len</var>;</td></tr></tbody></table></div>
+Sends <code class="varname">len</code> bytes of audio data from the buffer pointed to by
+<code class="varname">data</code> to the server. The data is not parsed for timing
+or validity, but sent raw over the connection. The connection must already have been
+established by a successful call to
+<a href="libshout2.html#shout_open"><code class="function">shout_open</code></a>.
+<div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Warning</h3>This function should not be used unless you know exactly what you
+are doing. Its use is deprecated and it may be removed in a future version of
+the library.</div><div class="variablelist"><p class="title"><b>Return Values</b></p><dl><dt><span class="term">&gt;= 0</span></dt><dd>The number of bytes written.</dd><dt><span class="term"><code class="constant">SHOUTERR_INSANE</code></span></dt><dd><code class="varname">self</code> is not a valid <span class="type">shout_t</span>
+  object.</dd><dt><span class="term"><code class="constant">SHOUTERR_UNCONNECTED</code></span></dt><dd><code class="varname">self</code> is not currently connected.</dd><dt><span class="term"><code class="constant">SHOUTERR_SOCKET</code></span></dt><dd>An error occured while talking to the server.</dd></dl></div><div class="funcsynopsis"><a name="shout_sync"></a><p><code class="funcdef">void <b class="fsfunc">shout_sync</b>(</code><var class="pdparam">self</var><code>)</code>;<br><code>shout_t</code> *<code>self</code>;</p></div>
+Causes the caller to sleep for the amount of time necessary to play back
+audio sent since the last call to <code class="function">shout_sync</code>. Should
+be called before every call to
+<a href="libshout2.html#shout_send"><code class="function">shout_send</code></a> to
+ensure that audio data is sent to the server at the correct speed.
+Alternatively, the caller may use
+<a href="libshout2.html#shout_delay"><code class="function">shout_delay</code></a> to
+determine the number of milliseconds to wait and delay itself.
+
+<div class="funcsynopsis"><a name="shout_delay"></a><p><code class="funcdef">int <b class="fsfunc">shout_delay</b>(</code><var class="pdparam">self</var><code>)</code>;<br><code>shout_t</code> *<code>self</code>;</p></div>
+Returns the number of milliseconds the caller should wait before calling
+<a href="libshout2.html#shout_send"><code class="function">shout_send</code></a> again.
+This function is provided as an alternative to
+<a href="libshout2.html#shout_sync"><code class="function">shout_sync</code></a> for
+applications that may wish to do other processing in the meantime.
+
+</div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2498131"></a>Connection parameters</h3></div></div></div>
+
+The following functions are used to get or set attributes of the
+<span class="type">shout_t</span> object before calling
+<a href="libshout2.html#shout_open"><code class="function">shout_open</code></a>.  They all
+work the same way: they operate on one attribute of a
+<span class="type">shout_t</span>*.  The <code class="function">shout_get_*</code> functions
+return the value of their associated parameter, or 0 on error (that's
+NULL for those functions that return strings). The
+<code class="function">shout_set_*</code> functions will return either
+<code class="constant">SHOUTERR_SUCCESS</code> on success, or one of:
+
+<div class="itemizedlist"><ul type="disc"><li><code class="constant">SHOUTERR_INSANE</code> - <span class="type">shout_t</span>
+  is invalid.</li><li><code class="constant">SHOUTERR_MALLOC</code> - libshout could not
+  allocate enough memory to assign the parameter.</li><li><code class="constant">SHOUTERR_CONNECTED</code> - you are attempting
+  to change a connection attribute while the connection is open. Since these
+  parameters are only used when first opening the connection, this operation
+  would be useless.</li></ul></div><div class="funcsynopsis"><a name="shout_set_host"></a><table border="0" summary="Function synopsis" cellspacing="0" cellpadding="0" style="padding-bottom: 1em"><tbody><tr><td><code class="funcdef">int <b class="fsfunc">shout_set_host</b>(</code></td><td><var class="pdparam">self</var>, </td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td><var class="pdparam">host</var><code>)</code>;</td><td>&nbsp;</td></tr></tbody></table><table border="0" summary="Function argument synopsis" cellspacing="0" cellpadding="0"><tbody><tr><td>shout_t *&nbsp;</td><td><var class="pdparam">self</var>;</td></tr><tr><td>const char *&nbsp;</td><td><var class="pdparam">host</var>;</td></tr></tbody></table></div>
+Sets the server hostname or IP address. The default is <code class="constant">localhost</code>.
+
+<div class="funcsynopsis"><a name="shout_get_host"></a><p><code class="funcdef">const char *<b class="fsfunc">shout_get_host</b>(</code><var class="pdparam">self</var><code>)</code>;<br><code>shout_t</code> *<code>self</code>;</p></div>
+Returns the server hostname or IP address.
+
+<div class="funcsynopsis"><a name="shout_set_port"></a><p><code class="funcdef">int <b class="fsfunc">shout_set_port</b>(</code><var class="pdparam">self</var>, <var class="pdparam">port</var><code>)</code>;<br><code>shout_t</code> *<code>self</code>;<br>int <code>port</code>;</p></div>
+Sets the server port. The default is <code class="constant">8000</code>.
+
+<div class="funcsynopsis"><a name="shout_get_port"></a><p><code class="funcdef">int <b class="fsfunc">shout_get_port</b>(</code><var class="pdparam">self</var><code>)</code>;<br><code>shout_t</code> *<code>self</code>;</p></div>
+Returns the server port.
+
+<div class="funcsynopsis"><a name="shout_set_user"></a><table border="0" summary="Function synopsis" cellspacing="0" cellpadding="0" style="padding-bottom: 1em"><tbody><tr><td><code class="funcdef">int <b class="fsfunc">shout_set_user</b>(</code></td><td><var class="pdparam">self</var>, </td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td><var class="pdparam">user</var><code>)</code>;</td><td>&nbsp;</td></tr></tbody></table><table border="0" summary="Function argument synopsis" cellspacing="0" cellpadding="0"><tbody><tr><td>shout_t *&nbsp;</td><td><var class="pdparam">self</var>;</td></tr><tr><td>const char *&nbsp;</td><td><var class="pdparam">user</var>;</td></tr></tbody></table></div>
+Sets the user to authenticate as, for protocols that can use this parameter.
+The default is <code class="constant">source</code>.
+
+<div class="funcsynopsis"><a name="shout_get_user"></a><p><code class="funcdef">const char *<b class="fsfunc">shout_get_user</b>(</code><var class="pdparam">self</var><code>)</code>;<br><code>shout_t</code> *<code>self</code>;</p></div>
+Returns the user name.
+
+<div class="funcsynopsis"><a name="shout_set_pass"></a><table border="0" summary="Function synopsis" cellspacing="0" cellpadding="0" style="padding-bottom: 1em"><tbody><tr><td><code class="funcdef">int <b class="fsfunc">shout_set_pass</b>(</code></td><td><var class="pdparam">self</var>, </td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td><var class="pdparam">pass</var><code>)</code>;</td><td>&nbsp;</td></tr></tbody></table><table border="0" summary="Function argument synopsis" cellspacing="0" cellpadding="0"><tbody><tr><td>shout_t *&nbsp;</td><td><var class="pdparam">self</var>;</td></tr><tr><td>const char *&nbsp;</td><td><var class="pdparam">pass</var>;</td></tr></tbody></table></div>
+Sets the password to authenticate to the server with. This parameter
+<span class="emphasis"><em>must</em></span> be set. There is no default.
+
+<div class="funcsynopsis"><a name="shout_get_pass"></a><p><code class="funcdef">const char *<b class="fsfunc">shout_get_pass</b>(</code><var class="pdparam">self</var><code>)</code>;<br><code>shout_t</code> *<code>self</code>;</p></div>
+Returns the password.
+
+<div class="funcsynopsis"><a name="shout_set_protocol"></a><table border="0" summary="Function synopsis" cellspacing="0" cellpadding="0" style="padding-bottom: 1em"><tbody><tr><td><code class="funcdef">int <b class="fsfunc">shout_set_protocol</b>(</code></td><td><var class="pdparam">self</var>, </td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td><var class="pdparam">protocol</var><code>)</code>;</td><td>&nbsp;</td></tr></tbody></table><table border="0" summary="Function argument synopsis" cellspacing="0" cellpadding="0"><tbody><tr><td>shout_t *&nbsp;</td><td><var class="pdparam">self</var>;</td></tr><tr><td>int &nbsp;</td><td><var class="pdparam">protocol</var>;</td></tr></tbody></table></div>
+Set the protocol with which to connect to the server. Supported protocols
+are listed in <a href="libshout2.html#protocol_constants">Protocol Constants</a>.
+The default is <code class="constant">SHOUT_PROTOCOL_HTTP</code> (compatible with
+Icecast 2).
+
+<div class="funcsynopsis"><a name="shout_get_protocol"></a><p><code class="funcdef">int <b class="fsfunc">shout_get_protocol</b>(</code><var class="pdparam">self</var><code>)</code>;<br><code>shout_t</code> *<code>self</code>;</p></div>
+Returns the protocol used to connect to the server.
+
+<div class="funcsynopsis"><a name="shout_set_format"></a><table border="0" summary="Function synopsis" cellspacing="0" cellpadding="0" style="padding-bottom: 1em"><tbody><tr><td><code class="funcdef">int <b class="fsfunc">shout_set_format</b>(</code></td><td><var class="pdparam">self</var>, </td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td><var class="pdparam">format</var><code>)</code>;</td><td>&nbsp;</td></tr></tbody></table><table border="0" summary="Function argument synopsis" cellspacing="0" cellpadding="0"><tbody><tr><td>shout_t *&nbsp;</td><td><var class="pdparam">self</var>;</td></tr><tr><td>int &nbsp;</td><td><var class="pdparam">format</var>;</td></tr></tbody></table></div>
+Sets the audio format of this stream. The currently supported formats
+are listed in <a href="libshout2.html#format_constants">Format Constants</a>.
+The default is <code class="constant">SHOUT_FORMAT_VORBIS</code>.
+
+<div class="funcsynopsis"><a name="shout_get_format"></a><p><code class="funcdef">int <b class="fsfunc">shout_get_format</b>(</code><var class="pdparam">self</var><code>)</code>;<br><code>shout_t</code> *<code>self</code>;</p></div>
+Returns the audio format used by this stream.
+
+<div class="funcsynopsis"><a name="shout_set_mount"></a><table border="0" summary="Function synopsis" cellspacing="0" cellpadding="0" style="padding-bottom: 1em"><tbody><tr><td><code class="funcdef">int <b class="fsfunc">shout_set_mount</b>(</code></td><td><var class="pdparam">self</var>, </td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td><var class="pdparam">mount</var><code>)</code>;</td><td>&nbsp;</td></tr></tbody></table><table border="0" summary="Function argument synopsis" cellspacing="0" cellpadding="0"><tbody><tr><td>shout_t *&nbsp;</td><td><var class="pdparam">self</var>;</td></tr><tr><td>const char *&nbsp;</td><td><var class="pdparam">mount</var>;</td></tr></tbody></table></div>
+Sets the mount point for this stream, for protocols that support this option
+(<code class="constant">SHOUT_PROTOCOL_ICY</code> doesn't).
+
+<div class="funcsynopsis"><a name="shout_get_mount"></a><p><code class="funcdef">const char *<b class="fsfunc">shout_get_mount</b>(</code><var class="pdparam">self</var><code>)</code>;<br><code>shout_t</code> *<code>self</code>;</p></div>
+Returns the stream mount point.
+
+<div class="funcsynopsis"><a name="shout_set_dumpfile"></a><table border="0" summary="Function synopsis" cellspacing="0" cellpadding="0" style="padding-bottom: 1em"><tbody><tr><td><code class="funcdef">int <b class="fsfunc">shout_set_dumpfile</b>(</code></td><td><var class="pdparam">self</var>, </td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td><var class="pdparam">dumpfile</var><code>)</code>;</td><td>&nbsp;</td></tr></tbody></table><table border="0" summary="Function argument synopsis" cellspacing="0" cellpadding="0"><tbody><tr><td>shout_t *&nbsp;</td><td><var class="pdparam">self</var>;</td></tr><tr><td>const char *&nbsp;</td><td><var class="pdparam">dumpfile</var>;</td></tr></tbody></table></div>
+If the server supports it, you can request that your stream be archived
+on the server under the name <code class="varname">dumpfile</code>. This can quickly
+eat a lot of disk space, so think twice before setting it.
+
+<div class="funcsynopsis"><a name="shout_get_dumpfile"></a><table border="0" summary="Function synopsis" cellspacing="0" cellpadding="0" style="padding-bottom: 1em"><tbody><tr><td><code class="funcdef">const char *<b class="fsfunc">shout_get_dumpfile</b>(</code></td><td><var class="pdparam">self</var><code>)</code>;</td><td>&nbsp;</td></tr></tbody></table><table border="0" summary="Function argument synopsis" cellspacing="0" cellpadding="0"><tbody><tr><td>shout_t *&nbsp;</td><td><var class="pdparam">self</var>;</td></tr></tbody></table></div>
+Returns the dump file, if specified.
+
+<div class="funcsynopsis"><a name="shout_set_agent"></a><table border="0" summary="Function synopsis" cellspacing="0" cellpadding="0" style="padding-bottom: 1em"><tbody><tr><td><code class="funcdef">int <b class="fsfunc">shout_set_agent</b>(</code></td><td><var class="pdparam">self</var>, </td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td><var class="pdparam">agent</var><code>)</code>;</td><td>&nbsp;</td></tr></tbody></table><table border="0" summary="Function argument synopsis" cellspacing="0" cellpadding="0"><tbody><tr><td>shout_t *&nbsp;</td><td><var class="pdparam">self</var>;</td></tr><tr><td>const char *&nbsp;</td><td><var class="pdparam">agent</var>;</td></tr></tbody></table></div>
+Sets the user agent header. This is <code class="constant">libshout/VERSION</code>
+by default. If you don't know what this function is for, don't use it.
+
+<div class="funcsynopsis"><a name="shout_get_agent"></a><p><code class="funcdef">const char *<b class="fsfunc">shout_get_agent</b>(</code><var class="pdparam">self</var><code>)</code>;<br><code>shout_t</code> *<code>self</code>;</p></div>
+Returns the user agent.
+
+<div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id2498867"></a>Directory parameters</h4></div></div></div>
+
+The following parameters are optional. They are used to control whether
+and how your stream will be listed in the server's stream directory (if available).
+
+<div class="funcsynopsis"><a name="shout_set_public"></a><table border="0" summary="Function synopsis" cellspacing="0" cellpadding="0" style="padding-bottom: 1em"><tbody><tr><td><code class="funcdef">int <b class="fsfunc">shout_set_public</b>(</code></td><td><var class="pdparam">self</var>, </td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td><var class="pdparam">makepublic</var><code>)</code>;</td><td>&nbsp;</td></tr></tbody></table><table border="0" summary="Function argument synopsis" cellspacing="0" cellpadding="0"><tbody><tr><td>shout_t *&nbsp;</td><td><var class="pdparam">self</var>;</td></tr><tr><td>int &nbsp;</td><td><var class="pdparam">makepublic</var>;</td></tr></tbody></table></div>
+Setting this to <code class="constant">1</code> asks the server to list the stream in
+any directories it knows about. To suppress listing, set this to
+<code class="constant">0</code>. The default is <code class="constant">0</code>.
+
+<div class="funcsynopsis"><a name="shout_get_public"></a><p><code class="funcdef">int <b class="fsfunc">shout_get_public</b>(</code><var class="pdparam">self</var><code>)</code>;<br><code>shout_t</code> *<code>self</code>;</p></div>
+Returns whether or not this stream is public.
+
+<div class="funcsynopsis"><a name="shout_set_name"></a><table border="0" summary="Function synopsis" cellspacing="0" cellpadding="0" style="padding-bottom: 1em"><tbody><tr><td><code class="funcdef">int <b class="fsfunc">shout_set_name</b>(</code></td><td><var class="pdparam">self</var>, </td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td><var class="pdparam">name</var><code>)</code>;</td><td>&nbsp;</td></tr></tbody></table><table border="0" summary="Function argument synopsis" cellspacing="0" cellpadding="0"><tbody><tr><td>shout_t *&nbsp;</td><td><var class="pdparam">self</var>;</td></tr><tr><td>const char *&nbsp;</td><td><var class="pdparam">name</var>;</td></tr></tbody></table></div>
+Sets the name of the stream.
+
+<div class="funcsynopsis"><a name="shout_get_name"></a><p><code class="funcdef">const char *<b class="fsfunc">shout_get_name</b>(</code><var class="pdparam">self</var><code>)</code>;<br><code>shout_t</code> *<code>self</code>;</p></div>
+Returns the stream name.
+
+<div class="funcsynopsis"><a name="shout_set_url"></a><table border="0" summary="Function synopsis" cellspacing="0" cellpadding="0" style="padding-bottom: 1em"><tbody><tr><td><code class="funcdef">int <b class="fsfunc">shout_set_url</b>(</code></td><td><var class="pdparam">self</var>, </td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td><var class="pdparam">url</var><code>)</code>;</td><td>&nbsp;</td></tr></tbody></table><table border="0" summary="Function argument synopsis" cellspacing="0" cellpadding="0"><tbody><tr><td>shout_t *&nbsp;</td><td><var class="pdparam">self</var>;</td></tr><tr><td>const char *&nbsp;</td><td><var class="pdparam">url</var>;</td></tr></tbody></table></div>
+Sets the URL of a site about this stream.
+
+<div class="funcsynopsis"><a name="shout_get_url"></a><p><code class="funcdef">const char *<b class="fsfunc">shout_get_url</b>(</code><var class="pdparam">self</var><code>)</code>;<br><code>shout_t</code> *<code>self</code>;</p></div>
+Returns the stream URL.
+
+<div class="funcsynopsis"><a name="shout_set_genre"></a><table border="0" summary="Function synopsis" cellspacing="0" cellpadding="0" style="padding-bottom: 1em"><tbody><tr><td><code class="funcdef">int <b class="fsfunc">shout_set_genre</b>(</code></td><td><var class="pdparam">self</var>, </td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td><var class="pdparam">genre</var><code>)</code>;</td><td>&nbsp;</td></tr></tbody></table><table border="0" summary="Function argument synopsis" cellspacing="0" cellpadding="0"><tbody><tr><td>shout_t *&nbsp;</td><td><var class="pdparam">self</var>;</td></tr><tr><td>const char *&nbsp;</td><td><var class="pdparam">genre</var>;</td></tr></tbody></table></div>
+Sets the genre (or genres) of the stream. This is usually a keyword list,
+eg "pop rock rap".
+
+<div class="funcsynopsis"><a name="shout_get_genre"></a><p><code class="funcdef">const char *<b class="fsfunc">shout_get_genre</b>(</code><var class="pdparam">self</var><code>)</code>;<br><code>shout_t</code> *<code>self</code>;</p></div>
+Returns the stream genre.
+
+<div class="funcsynopsis"><a name="shout_set_description"></a><table border="0" summary="Function synopsis" cellspacing="0" cellpadding="0" style="padding-bottom: 1em"><tbody><tr><td><code class="funcdef">int <b class="fsfunc">shout_set_description</b>(</code></td><td><var class="pdparam">self</var>, </td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td><var class="pdparam">description</var><code>)</code>;</td><td>&nbsp;</td></tr></tbody></table><table border="0" summary="Function argument synopsis" cellspacing="0" cellpadding="0"><tbody><tr><td>shout_t *&nbsp;</td><td><var class="pdparam">self</var>;</td></tr><tr><td>const char *&nbsp;</td><td><var class="pdparam">description</var>;</td></tr></tbody></table></div>
+Sets the description of this stream.
+
+<div class="funcsynopsis"><a name="shout_get_description"></a><table border="0" summary="Function synopsis" cellspacing="0" cellpadding="0" style="padding-bottom: 1em"><tbody><tr><td><code class="funcdef">const char *<b class="fsfunc">shout_get_description</b>(</code></td><td><var class="pdparam">self</var><code>)</code>;</td><td>&nbsp;</td></tr></tbody></table><table border="0" summary="Function argument synopsis" cellspacing="0" cellpadding="0"><tbody><tr><td>shout_t *&nbsp;</td><td><var class="pdparam">self</var>;</td></tr></tbody></table></div>
+Returns the stream description.
+
+<div class="funcsynopsis"><a name="shout_set_audio_info"></a><table border="0" summary="Function synopsis" cellspacing="0" cellpadding="0" style="padding-bottom: 1em"><tbody><tr><td><code class="funcdef">int <b class="fsfunc">shout_set_audio_info</b>(</code></td><td><var class="pdparam">self</var>, </td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td><var class="pdparam">name</var>, </td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td><var class="pdparam">value</var><code>)</code>;</td><td>&nbsp;</td></tr></tbody></table><table border="0" summary="Function argument synopsis" cellspacing="0" cellpadding="0"><tbody><tr><td>shout_t *&nbsp;</td><td><var class="pdparam">self</var>;</td></tr><tr><td>const char *&nbsp;</td><td><var class="pdparam">name</var>;</td></tr><tr><td>const char *&nbsp;</td><td><var class="pdparam">value</var>;</td></tr></tbody></table></div>
+Sets a stream audio parameter (eg bitrate, samplerate, channels or quality).
+The currently defined parameters are listed in the
+<a href="libshout2.html#audio_info_constants">Audio Info Constants</a> section, but
+you are free to add additional fields if your directory server understands them.
+
+<div class="funcsynopsis"><a name="shout_get_audio_info"></a><table border="0" summary="Function synopsis" cellspacing="0" cellpadding="0" style="padding-bottom: 1em"><tbody><tr><td><code class="funcdef">const char *<b class="fsfunc">shout_get_audio_info</b>(</code></td><td><var class="pdparam">self</var>, </td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td><var class="pdparam">name</var><code>)</code>;</td><td>&nbsp;</td></tr></tbody></table><table border="0" summary="Function argument synopsis" cellspacing="0" cellpadding="0"><tbody><tr><td>shout_t *&nbsp;</td><td><var class="pdparam">self</var>;</td></tr><tr><td>const char *&nbsp;</td><td><var class="pdparam">name</var>;</td></tr></tbody></table></div>
+Returns the value of the audio info field <code class="varname">name</code>, if defined.
+
+</div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2499325"></a>Metadata</h3></div></div></div>
+These functions currently only make sense for MP3 streams. Vorbis streams are expected
+to embed metadata as vorbis comments in the audio stream.
+
+<div class="funcsynopsis"><a name="shout_metadata_new"></a><p><code class="funcdef">shout_metadata_t *<b class="fsfunc">shout_metadata_new</b>(</code><code>)</code>;</p></div>
+Allocates a new metadata structure, or returns NULL if no memory is available. The
+returned structure should be freed with
+<a href="libshout2.html#shout_metadata_free">shout_metadata_free</a> when you are done with
+it.
+
+<div class="funcsynopsis"><a name="shout_metadata_free"></a><table border="0" summary="Function synopsis" cellspacing="0" cellpadding="0" style="padding-bottom: 1em"><tbody><tr><td><code class="funcdef">void <b class="fsfunc">shout_metadata_free</b>(</code></td><td><var class="pdparam">self</var><code>)</code>;</td><td>&nbsp;</td></tr></tbody></table><table border="0" summary="Function argument synopsis" cellspacing="0" cellpadding="0"><tbody><tr><td>shout_metadata_t *&nbsp;</td><td><var class="pdparam">self</var>;</td></tr></tbody></table></div>
+Frees any resources associated with <code class="varname">self</code>.
+
+<div class="funcsynopsis"><a name="shout_metadata_add"></a><table border="0" summary="Function synopsis" cellspacing="0" cellpadding="0" style="padding-bottom: 1em"><tbody><tr><td><code class="funcdef">int <b class="fsfunc">shout_metadata_add</b>(</code></td><td><var class="pdparam">self</var>, </td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td><var class="pdparam">name</var>, </td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td><var class="pdparam">value</var><code>)</code>;</td><td>&nbsp;</td></tr></tbody></table><table border="0" summary="Function argument synopsis" cellspacing="0" cellpadding="0"><tbody><tr><td>shout_metadata_t *&nbsp;</td><td><var class="pdparam">self</var>;</td></tr><tr><td>const char *&nbsp;</td><td><var class="pdparam">name</var>;</td></tr><tr><td>const char *&nbsp;</td><td><var class="pdparam">value</var>;</td></tr></tbody></table></div>
+Add metadata value <code class="varname">value</code> to <code class="varname">self</code>, under the
+key <code class="varname">name</code>. You'll probably want to set <code class="varname">name</code>
+to <code class="constant">"song"</code>, though <code class="constant">"url"</code> may also be
+useful.
+
+<div class="variablelist"><p class="title"><b>Return Values</b></p><dl><dt><span class="term"><code class="constant">SHOUTERR_SUCCESS</code></span></dt><dd>The metadata was copied into <code class="varname">self</code>.</dd><dt><span class="term"><code class="constant">SHOUTERR_INSANE</code></span></dt><dd><code class="varname">self</code> is not a valid <span class="type">shout_metadata_t</span> object.</dd><dt><span class="term"><code class="constant">SHOUTERR_MALLOC</code></span></dt><dd>Couldn't allocate enough memory to copy the metadata.</dd></dl></div><div class="funcsynopsis"><a name="shout_set_metadata"></a><table border="0" summary="Function synopsis" cellspacing="0" cellpadding="0" style="padding-bottom: 1em"><tbody><tr><td><code class="funcdef">int <b class="fsfunc">shout_set_metadata</b>(</code></td><td><var class="pdparam">self</var>, </td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td><var class="pdparam">metadata</var><code>)</code>;</td><td>&nbsp;</td></tr></tbody></table><table border="0" summary="Function argument synopsis" cellspacing="0" cellpadding="0"><tbody><tr><td>shout_t *&nbsp;</td><td><var class="pdparam">self</var>;</td></tr><tr><td>shout_metadata_t *&nbsp;</td><td><var class="pdparam">metadata</var>;</td></tr></tbody></table></div>
+Sets metadata on the connection <code class="varname">self</code> to <code class="varname">metadata</code>.
+Only MP3 streams support this type of metadata update. You may use this function
+on defined but closed connections (this is useful if you simply want to set the
+metadata for a stream provided by another process).
+
+<div class="variablelist"><p class="title"><b>Return Values</b></p><dl><dt><span class="term"><code class="constant">SHOUTERR_SUCCESS</code></span></dt><dd>Metadata was updated successfully.</dd><dt><span class="term"><code class="constant">SHOUTERR_INSANE</code></span></dt><dd><code class="varname">self</code> and/or <code class="varname">metadata</code> is invalid.</dd><dt><span class="term"><code class="constant">SHOUTERR_MALLOC</code></span></dt><dd>Couldn't allocate enough memory to complete the operation.</dd><dt><span class="term"><code class="constant">SHOUTERR_NOCONNECT</code></span></dt><dd>The server refused the connection attempt.</dd><dt><span class="term"><code class="constant">SHOUTERR_NOLOGIN</code></span></dt><dd>The server did not accept your authorization credentials.</dd><dt><span class="term"><code class="constant">SHOUTERR_SOCKET</code></span></dt><dd>An error occured talking to the server.</dd><dt><span class="term"><code class="constant">SHOUTERR_METADATA</code></span></dt><dd>The server returned any other error (eg bad mount point).</dd></dl></div></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="id2499667"></a>Data Types</h2></div></div></div><div class="variablelist"><a name="data_types"></a><dl><dt><a name="shout_t"></a><span class="term"><span class="type">shout_t</span></span></dt><dd>Opaque data type that refers to a single server connection.</dd><dt><a name="shout_metadata_t"></a><span class="term"><span class="type">shout_metadata_t</span></span></dt><dd>Opaque data type that refers to a set of metadata attributes. Currently
+  the only defined attribute is <code class="constant">song</code>.</dd></dl></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="id2499715"></a>Constants</h2></div></div></div><div class="variablelist"><a name="error_constants"></a><p class="title"><b>Error Codes</b></p><dl><dt><span class="term"><code class="constant">SHOUTERR_SUCCESS</code></span></dt><dd>Indicates success.</dd><dt><span class="term"><code class="constant">SHOUTERR_INSANE</code></span></dt><dd>Indicates bad parameters, either nonsense or not applicable due to the current
+  state of the connection.</dd><dt><span class="term"><code class="constant">SHOUTERR_MALLOC</code></span></dt><dd>Indicates the function could not allocate the memory it required.</dd><dt><span class="term"><code class="constant">SHOUTERR_NOCONNECT</code></span></dt><dd>Indicates a connection with the server could not be established.</dd><dt><span class="term"><code class="constant">SHOUTERR_NOLOGIN</code></span></dt><dd>Indicates the server refused to accept a login attempt. This could be caused
+  by a bad user name or password.</dd><dt><span class="term"><code class="constant">SHOUTERR_SOCKET</code></span></dt><dd>Indicates an error sending or receiving data.</dd><dt><span class="term"><code class="constant">SHOUTERR_METADATA</code></span></dt><dd>Indicates an error updating metadata on the server.</dd><dt><span class="term"><code class="constant">SHOUTERR_CONNECTED</code></span></dt><dd>Indicates that, while connected, you attempted to call a function which only makes
+  sense before connection (eg you attempted to set the user name or stream name).</dd><dt><span class="term"><code class="constant">SHOUTERR_UNCONNECTED</code></span></dt><dd>Indicates that you attempted to use a function that requires an open connection
+  (for example, <code class="function">shout_send</code>) while you were not connected.</dd><dt><span class="term"><code class="constant">SHOUTERR_UNSUPPORTED</code></span></dt><dd>Indicates that you attempted to use a function which is unsupported in the
+  state of your connection. For example, attempting to set metadata while using the
+  Ogg Vorbis format is unsupported.</dd></dl></div><div class="variablelist"><a name="format_constants"></a><p class="title"><b>Formats</b></p><dl><dt><span class="term"><code class="constant">SHOUT_FORMAT_VORBIS</code></span></dt><dd>The Ogg Vorbis format. This is the default format.</dd><dt><span class="term"><code class="constant">SHOUT_FORMAT_MP3</code></span></dt><dd>The MP3 format.</dd></dl></div><div class="variablelist"><a name="protocol_constants"></a><p class="title"><b>Protocols</b></p><dl><dt><span class="term"><code class="constant">SHOUT_PROTOCOL_HTTP</code></span></dt><dd>The HTTP protocol. This is the native protocol of the
+  <span class="application">icecast 2</span> server, and is the default.</dd><dt><span class="term"><code class="constant">SHOUT_PROTOCOL_XAUDIOCAST</code></span></dt><dd>The Audiocast format. This is the native protocol of
+  <span class="application">icecast 1</span>.</dd><dt><span class="term"><code class="constant">SHOUT_PROTOCOL_ICY</code></span></dt><dd>The ShoutCast format. This is the native protocol of
+  <span class="application">ShoutCast</span>.</dd></dl></div><div class="variablelist"><a name="audio_info_constants"></a><p class="title"><b>Audio Parameters</b></p><dl><dt><span class="term"><code class="constant">SHOUT_AI_BITRATE</code></span></dt><dd>Used to specify the nominal bitrate of the stream.</dd><dt><span class="term"><code class="constant">SHOUT_AI_SAMPLERATE</code></span></dt><dd>Used to specify the samplerate of the stream.</dd><dt><span class="term"><code class="constant">SHOUT_AI_CHANNELS</code></span></dt><dd>Used to specify the number of channels (usually one or two).</dd><dt><span class="term"><code class="constant">SHOUT_AI_QUALITY</code></span></dt><dd>Used to specify the Ogg Vorbis encoding quality of the stream.</dd></dl></div></div></div></div>
+</body></html>
