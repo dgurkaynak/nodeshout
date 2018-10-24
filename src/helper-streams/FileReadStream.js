@@ -4,7 +4,7 @@ var util = require('util'),
 
 
 /**
- * This class is simple clone of readable file stream that supports custom buffer size. 
+ * This class is simple clone of readable file stream that supports custom buffer size.
  * Because, fs.createReadableStream does not support to specify buffer size.
  * @constructor
  * @param {string} file File path.
@@ -54,7 +54,7 @@ FileReadStream.prototype.start = function() {
 FileReadStream.prototype._read = function() {
     if (this.totalBytesRead >= this.fileSize) {
         // File is finished.
-        fs.close(this.fd);
+        fs.closeSync(this.fd);
         this.push(null);
         return;
     }

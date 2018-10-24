@@ -60,7 +60,7 @@ fs.open("./music/01.mp3", 'r', function(status, fd) {
                     setTimeout(read, Math.abs(shout.delay()));
                 } else {
                     console.log('Zero bytes read, aborting');
-                    fs.close(fd);
+                    fs.closeSync(fd);
                     shout.close();
                 }
             });

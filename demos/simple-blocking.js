@@ -61,7 +61,7 @@ fs.open("./music/01.mp3", 'r', function(status, fd) {
             shout.sync();
         }
 
-        fs.close(fd);
+        fs.closeSync(fd);
         shout.close();
     });
 });
