@@ -22,7 +22,7 @@ shout.setAudioInfo('channels', '2');
 shout.open();
 
 // Create file read stream and shout stream
-var fileStream = new FileReadStream('./music/01.mp3', 65536),
+var fileStream = new FileReadStream('./music/test.mp3', 65536),
     shoutStream = fileStream.pipe(new ShoutStream(shout));
 
 fileStream.on('data', function(chunk) {

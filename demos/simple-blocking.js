@@ -20,7 +20,7 @@ shout.setAudioInfo('channels', '2');
 shout.open();
 
 // Don't forget to replace mp3 file path.
-fs.open("./music/01.mp3", 'r', function(status, fd) {
+fs.open("./music/test.mp3", 'r', function(status, fd) {
     if (status) {
         console.log(status.message);
         return;
