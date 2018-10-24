@@ -12,15 +12,15 @@ shout.setPort(8000);
 shout.setUser('source');
 shout.setPassword('hackme');
 shout.setMount('deneme');
-shout.setFormat(1); // 0=ogg, 1=mp3
+shout.setFormat(0); // 0=ogg, 1=mp3
 shout.setAudioInfo('bitrate', '192');
 shout.setAudioInfo('samplerate', '44100');
 shout.setAudioInfo('channels', '2');
 
 shout.open();
 
-// Don't forget to replace mp3 file path.
-fs.open("./music/test.mp3", 'r', function(status, fd) {
+// Don't forget to replace ogg file path.
+fs.open("./music/test.ogg", 'r', function(status, fd) {
     if (status) {
         console.log(status.message);
         return;
