@@ -9,13 +9,18 @@
   "author": "Deniz Gurkaynak <dgurkaynak@gmail.com>",
   "homepage": "https://github.com/dgurkaynak/nodeshout",
   "repository": {
-      "type": "git",
-      "url": "https://github.com/dgurkaynak/nodeshout.git"
+    "type": "git",
+    "url": "https://github.com/dgurkaynak/nodeshout.git"
   },
   "bugs": {
     "url": "https://github.com/dgurkaynak/nodeshout/issues"
   },
-  "keywords": ["libshout", "icecast", "stream", "radio"],
+  "keywords": [
+    "libshout",
+    "icecast",
+    "stream",
+    "radio"
+  ],
   "license": "ISC",
   "dependencies": {
     "ffi": "^2.0.0",
