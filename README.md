@@ -6,7 +6,22 @@ Native libshout bindings for node.js.
 
 More detail: http://icecast.org
 
-Original libshout docs: http://www.aelius.com/njh/libshout-doc/libshout.html
+Original libshout docs: http://www.aelius.com/njh/libshout-doc/libshout.html (a copy of this page can be also found at `/docs/libshout2.html`)
+
+## Node version compability
+
+Since this project heavily depends on [node-ffi](https://github.com/node-ffi/node-ffi/) project, there can be compability issues.
+
+My tests for the current version (0.1.3):
+
+| node | npm | result |
+| -- | -- | -- |
+| 12.11.0 | 6.11.3 | :x: [node-ffi does not support node 12 yet](https://github.com/node-ffi/node-ffi/pull/544) |
+| 11.15.0 | 6.7.0 | :white_check_mark: |
+| 10.16.0 | 6.9.0 | :white_check_mark: |
+| 9.11.1 | 5.6.0 | :white_check_mark: |
+| 8.11.4 | 5.6.0 | :white_check_mark: |
+| 6.14.1 | 3.10.10 | :x: |
 
 ## Usage
 
