@@ -1,7 +1,7 @@
-var FFI = require('ffi'),
-    ArrayType = require('ref-array'),
-    Struct = require('ref-struct'),
-    ref = require('ref');
+var FFI = require('ffi-napi'),
+    ArrayType = require('ref-array-napi'),
+    Struct = require('ref-struct-napi'),
+    ref = require('ref-napi');
 
 var voidPtr = ref.refType(ref.types.void);
 
@@ -10,7 +10,7 @@ var shout_tPtr = exports.shout_tPtr = ref.refType(shout_t);
 var shout_metadata_t = exports.shout_metadata_t = voidPtr;
 var shout_metadata_tPtr = exports.shout_metadata_tPtr = ref.refType(shout_metadata_t);
 
-module.exports = new FFI.Library('libshout', {
+module.exports =  FFI.Library('libshout', {
     shout_init: [ref.types.void, []],
     shout_shutdown: [ref.types.void, []],
     shout_version: [ref.types.CString, [

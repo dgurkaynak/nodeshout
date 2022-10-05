@@ -10,17 +10,20 @@ Original libshout docs: http://www.aelius.com/njh/libshout-doc/libshout.html (a 
 
 ## Node version compability
 
-Since this project heavily depends on [node-ffi](https://github.com/node-ffi/node-ffi/) project, there can be compability issues.
+Since this project heavily depends on [ffi-napi](https://github.com/node-ffi-napi/node-ffi-napi) project, there can be compability issues.
 
-My tests for the current version (0.1.3):
+My tests for the current version (1.0.0):
 
 | node | npm | result |
 | -- | -- | -- |
-| 12.11.0 | 6.11.3 | :x: [node-ffi does not support node 12 yet](https://github.com/node-ffi/node-ffi/pull/544) |
-| 11.15.0 | 6.7.0 | :white_check_mark: |
-| 10.16.0 | 6.9.0 | :white_check_mark: |
-| 9.11.1 | 5.6.0 | :white_check_mark: |
-| 8.11.4 | 5.6.0 | :white_check_mark: |
+| v18.10.0 | 8.19.2 | :x: |
+| 16.16.0 | 8.11.0 | :white_check_mark: |
+| 14.20.0 | 6.14.17 | :white_check_mark: |
+| 12.11.0 | 6.11.3 | :white_check_mark: |
+| 11.15.0 | 6.7.0 | :x: |
+| 10.16.0 | 6.9.0 | :x: |
+| 9.11.1 | 5.6.0 | :x: |
+| 8.11.4 | 5.6.0 | :x: |
 | 6.14.1 | 3.10.10 | :x: |
 
 ## Usage
@@ -110,3 +113,39 @@ shoutStream.on('finish', () => {
 ## Example
 
 Check the `/demos` folder.
+
+
+## Developing 
+Below is a short guild to the development in this repository
+
+- Clone repository 
+- Verify that your node version and NPM version are compatible with the repository. [NVM](https://github.com/nvm-sh/nvm) is useful here. 
+- Verify that you have the libshout dependency installed, for Mac OSX you can install with `brew install libshout` on a linux distribution like Ubuntu you need to download the source or binary and build it. Typically after building it will install to a directory like `/usr/local/lib/libshout` 
+- run `npm i`
+- run `npm run test` from the project root to check that project installed correctly  
+
+An output for the stream example should look similar to the following:
+
+```
+node ./demos/stream
+Libshout version: 2.4.6
+(node:1627118) [DEP0005] DeprecationWarning: Buffer() is deprecated due to security and usability issues. Please use the Buffer.alloc(), Buffer.allocUnsafe(), or Buffer.from() methods instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+Read 65536 bytes of data
+Read 65536 bytes of data
+Read 65536 bytes of data
+Read 65536 bytes of data
+Finished playing...
+```
+
+### Debuging
+
+
+#### Libshout install issue 
+If you get the below error its likely that the `libshout` dependency is installed incorrectly
+`Error: ENOENT: no such file or directory, open 'libshout.so'`
+
+The install for the libshout dependency on non-mac systems can be a bit annoying. I found it easiest to install it on linux via building from source. https://icecast.org/download/
+If you scroll down to the bottom of that page you can get the `libshout` source download `tar.gz` link. 
+
+After downloading the dependency, follow the `INSTALL` instructions for installing it locally. The `libshout` library should be installed to `/usr/local/lib/libshout` (At least it was on Ubuntu based distributions). This file must be passed into the `FFI.Library` function. Either you can pass in the fully qualifed path, or make the `/usr/local/lib/libshout` available to the system to reference without a path name. 
