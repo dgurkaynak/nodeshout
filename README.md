@@ -142,7 +142,7 @@ Finished playing...
 
 
 #### Libshout install issue 
-If you get the below error its likely that the `libshout` dependency is installed incorrectly
+If you get the below error its likely that the `libshout` dependency is installed incorrectly  
 `Error: ENOENT: no such file or directory, open 'libshout.so'`
 
 The install for the libshout dependency on non-mac systems can be a bit annoying. I found it easiest to install it on linux via building from source. https://icecast.org/download/
