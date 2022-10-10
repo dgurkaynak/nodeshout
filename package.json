@@ -21,7 +21,7 @@
     "stream",
     "radio"
   ],
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "ffi-napi": "^4.0.3",
     "ref-array-napi": "^1.2.2",
