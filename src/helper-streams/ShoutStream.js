@@ -5,7 +5,7 @@ var util = require('util'),
 /**
  *
  * @constructor
- * @param {shoutT} shout
+ * @param {ShoutT} shout
  */
 var ShoutStream = function(shout) {
     stream.Writable.call(this);

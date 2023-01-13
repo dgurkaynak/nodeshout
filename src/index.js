@@ -1,15 +1,9 @@
-var libshout = require('./libshout'),
-    shoutT = require('./shoutT'),
-    metadataT = require('./metadataT'),
-    nodeshout = {};
+const libshout = require('./libshout');
+const ShoutT = require('./shout_t');
+const MetadataT = require('./metadata_t');
 
 
-/**
- * Reference to libshout ffi wrapper.
- * @type {FFI.Library}
- * @private
- */
-nodeshout.libshout_ = libshout;
+const nodeshout = {};
 
 
 /**
@@ -36,9 +30,9 @@ nodeshout.shutdown = function() {
  */
 nodeshout.getVersion = function() {
     // Dummy buffers
-    var buff1 = new Buffer(100);
-    var buff2 = new Buffer(100);
-    var buff3 = new Buffer(100);
+    const buff1 = Buffer.alloc(100);
+    const buff2 = Buffer.alloc(100);
+    const buff3 = Buffer.alloc(100);
 
     return libshout.shout_version(buff1, buff2, buff3);
 };
@@ -47,20 +41,20 @@ nodeshout.getVersion = function() {
 /**
  * Allocates a new shout_t structure. May return NULL if no memory is available.
  * The result should be disposed of with free when you are finished with it.
- * @return {shoutT}
+ * @return {ShoutT}
  */
 nodeshout.create = function() {
-    return new shoutT();
+    return new ShoutT();
 };
 
 
 /**
  * Allocates a new medata_t structure. May return NULL if no memory is available.
  * The result should be disposed of with free when you are finished with it.
- * @return {metadataT}
+ * @return {MetadataT}
  */
 nodeshout.createMetadata = function() {
-    return new metadataT();
+    return new MetadataT();
 };
 
 
