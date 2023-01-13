@@ -4,7 +4,7 @@
   "description": "Native libshout bindings for node.",
   "main": "src/index.js",
   "scripts": {
-    "test": "node ./demos/stream && node ./demos/simple-blocking.js && node ./demos/simple-nonblocking.js"
+    "test": "node ./demos/01-blocking-io.js && node ./demos/02-non-blocking-io.js"
   },
   "author": "Deniz Gurkaynak <dgurkaynak@gmail.com>",
   "homepage": "https://github.com/dgurkaynak/nodeshout",
