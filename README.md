@@ -12,19 +12,18 @@ Original libshout docs: http://www.aelius.com/njh/libshout-doc/libshout.html (a 
 
 Since this project heavily depends on [ffi-napi](https://github.com/node-ffi-napi/node-ffi-napi) project, there can be compability issues.
 
-My tests for the current version (1.0.0):
+My tests for the current version (2.0.0):
 
 | node | npm | result |
 | -- | -- | -- |
-| v18.10.0 | 8.19.2 | :x: |
+| v18.13.0 | 8.19.3 | :white_check_mark: |
 | 16.16.0 | 8.11.0 | :white_check_mark: |
-| 14.20.0 | 6.14.17 | :white_check_mark: |
-| 12.11.0 | 6.11.3 | :white_check_mark: |
+| 14.20.1 | 6.14.17 | :white_check_mark: (`python` required to install) |
+| 12.22.12 | 6.14.16 | :white_check_mark: (`python` required to install) |
 | 11.15.0 | 6.7.0 | :x: Use version `0.1.3` |
 | 10.16.0 | 6.9.0 | :x: Use version `0.1.3` |
 | 9.11.1 | 5.6.0 | :x: Use version `0.1.3` |
 | 8.11.4 | 5.6.0 | :x: Use version `0.1.3` |
-| 6.14.1 | 3.10.10 | :x: |
 
 ## Usage
 
@@ -75,6 +74,12 @@ shout.send(buffer, bytesRead);
 
 For the synchronization, there is 2 method provided. First one is `shout.sync()` method, this method blocks current thread. Second one is `shout.delay()` method, this method returns how many milliseconds you should wait to send next audio chunk.
 
+> If you're gonna stream multiple files, beware that Icecast requires stable bitrate & sample rate for the whole stream. So all of your music files should have the exact bitrate & sample rate.
+
+## Examples
+
+Check the `/demos` folder.
+
 ## Metadata
 
 ```js
@@ -88,58 +93,17 @@ metadata.add('song', 'Led Zeppelin - I can\'t quit you baby');
 shout.setMetadata(metadata);
 ```
 
-## Streams
-
-Helper streams make all the things super-easy. You don't have to deal with reading and syncing stuff. They're avaliable `>= 0.1.1`.
-
-Include helper stream classes.
-
-```js
-const { FileReadStream, ShoutStream } = require('nodeshout');
-```
-
-and then pipe them together. That's all!
-
-```js
-const fileStream = new FileReadStream('./some/music.mp3', 65536);
-const shoutStream = fileStream.pipe(new ShoutStream(shout));
-
-shoutStream.on('finish', () => {
-    // Finished playing, you can create
-    // another stream for next song
-});
-```
-
-## Example
-
-Check the `/demos` folder.
-
-
 ## Developing
 Below is a short guild to the development in this repository
 
 - Clone repository
 - Verify that your node version and NPM version are compatible with the repository. [NVM](https://github.com/nvm-sh/nvm) is useful here.
 - Verify that you have the libshout dependency installed, for Mac OSX you can install with `brew install libshout` on a linux distribution like Ubuntu you need to download the source or binary and build it. Typically after building it will install to a directory like `/usr/local/lib/libshout`
-- run `npm i`
-- run `npm run test` from the project root to check that project installed correctly
-
-An output for the stream example should look similar to the following:
-
-```
-node ./demos/stream
-Libshout version: 2.4.6
-(node:1627118) [DEP0005] DeprecationWarning: Buffer() is deprecated due to security and usability issues. Please use the Buffer.alloc(), Buffer.allocUnsafe(), or Buffer.from() methods instead.
-(Use `node --trace-deprecation ...` to show where the warning was created)
-Read 65536 bytes of data
-Read 65536 bytes of data
-Read 65536 bytes of data
-Read 65536 bytes of data
-Finished playing...
-```
+- Install dependencies: `npm i`
+- Start icecast server
+- Run `npm test` and see it's working
 
 ### Debuging
-
 
 #### Libshout install issue
 If you get the below error its likely that the `libshout` dependency is installed incorrectly
